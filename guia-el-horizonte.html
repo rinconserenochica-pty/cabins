@@ -5,84 +5,81 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>El Horizonte — Rincón Sereno</title>
 <style>
-  :root{--bg:#0f1a12;--card:#162019;--card2:#1c2a1f;--green:#4caf72;--green-dim:#2d6b45;--gold:#c9a96e;--text:#e8ede9;--muted:#7a9080;--border:#2a3d2e}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:16px;line-height:1.6;padding-bottom:40px}
-  .lang-bar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);display:flex;justify-content:flex-end;padding:8px 16px;gap:8px}
-  .lang-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 14px;border-radius:20px;font-size:13px;cursor:pointer}
-  .lang-btn.active{background:var(--green-dim);border-color:var(--green);color:var(--text)}
-  .hero{position:relative;height:240px;overflow:hidden}
-  .hero img{width:100%;height:100%;object-fit:cover;object-position:center}
-  .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,26,18,.1),rgba(15,26,18,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
-  .hero-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px}
-  .hero-title{font-size:32px;font-weight:700;color:#fff;line-height:1.1}
-  .hero-sub{font-size:14px;color:var(--muted);margin-top:4px}
-  .tab-bar{position:sticky;top:41px;z-index:90;background:var(--card);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .tab-bar::-webkit-scrollbar{display:none}
-  .tab-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 16px 8px;border:none;background:none;color:var(--muted);font-size:10px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
-  .tab-btn .ti{font-size:20px}
-  .tab-btn.active{color:var(--green);border-bottom-color:var(--green)}
-  .tab-panel{display:none;padding:16px}
-  .tab-panel.active{display:block}
-  .card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
-  .card:last-child{margin-bottom:0}
-  .ch{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card2);border-bottom:1px solid var(--border)}
-  .ci{font-size:18px}
-  .ct{font-size:14px;font-weight:600;color:var(--gold)}
-  .cb{padding:12px 16px}
-  .ii{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
-  .ii:last-child{border-bottom:none}
-  .id{color:var(--green);font-size:16px;margin-top:2px;flex-shrink:0}
-  .it{font-size:14px}
-  .il{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
-  .wb{background:rgba(224,123,57,.12);border:1px solid rgba(224,123,57,.4);border-radius:10px;padding:11px 13px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
-  .wi{font-size:16px;flex-shrink:0;margin-top:1px}
-  .wt{font-size:13px;color:#f0b070;line-height:1.5}
-  .vb{display:flex;align-items:center;gap:12px;background:var(--green-dim);border:1px solid var(--green);border-radius:10px;padding:12px 16px;margin-top:10px;text-decoration:none;color:var(--text)}
-  .vbi{font-size:22px}
-  .vbt{font-size:14px;font-weight:500}
-  .vbs{font-size:12px;color:var(--muted)}
-  .tg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-  .tc{background:var(--card2);border-radius:10px;padding:12px;text-align:center}
-  .tl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-  .tv{font-size:24px;font-weight:700;color:var(--gold);margin-top:2px}
-  .wfc{background:var(--card2);border-radius:10px;padding:12px 14px}
-  .wfr{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
-  .wfk{font-size:12px;color:var(--muted)}
-  .wfv{font-size:14px;font-weight:500}
-  .ri{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;align-items:flex-start}
-  .ri:last-child{border-bottom:none}
-  .rc{color:var(--green);flex-shrink:0;margin-top:2px}
-  .rx{color:#e05555;flex-shrink:0;margin-top:2px}
-  .cc{display:flex;align-items:center;gap:14px;padding:4px 0}
-  .ca{width:44px;height:44px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-  .cn{font-size:15px;font-weight:600}
-  .oi{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
-  .oi:last-child{border-bottom:none}
-  .oi.done{opacity:.5}
-  .ocb{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);background:none;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
-  .oi.done .ocb{background:var(--green);border-color:var(--green);color:#fff}
-  .ott{font-size:14px;font-weight:600}
-  .ots{font-size:12px;color:var(--muted);margin-top:2px}
-  .opb{height:4px;background:var(--border);border-radius:2px;margin-bottom:14px;overflow:hidden}
-  .opbi{height:100%;background:var(--green);border-radius:2px;transition:width .3s}
-  .pi{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
-  .pi:last-child{border-bottom:none}
-  .pico{font-size:22px;flex-shrink:0;margin-top:2px}
-  .pn{font-size:14px;font-weight:600}
-  .ps{font-size:12px;color:var(--muted);margin-top:2px}
-  .pl{display:inline-block;margin-top:5px;font-size:12px;color:var(--green);text-decoration:none;border:1px solid var(--green-dim);border-radius:20px;padding:2px 10px}
-  .bbq-steps{background:var(--card2);border-radius:10px;border:1px solid var(--border);padding:12px 14px;margin-top:10px}
-  .bbq-step-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;font-weight:500}
-  .bbq-step{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
-  .bbq-step:last-of-type{margin-bottom:0}
-  .bbq-num{width:20px;height:20px;border-radius:50%;background:var(--green-dim);color:var(--text);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-  .bbq-txt{font-size:13px}
-  .bbq-icons{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
-  .bbq-icon-item{text-align:center;font-size:11px;color:var(--muted)}
-  .bbq-icon-item span{display:block;font-size:26px;line-height:1.3}
-  .bbq-sep{font-size:18px;color:var(--muted)}
-  .footer{text-align:center;color:var(--muted);font-size:12px;padding:20px 0 0}
+:root{--bg:#0f1a12;--card:#162019;--card2:#1c2a1f;--green:#4caf72;--green-dim:#2d6b45;--gold:#c9a96e;--text:#e8ede9;--muted:#7a9080;--border:#2a3d2e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;font-size:16px;line-height:1.6;padding-bottom:40px}
+.lang-bar{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);display:flex;justify-content:flex-end;padding:8px 16px;gap:8px}
+.lang-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 14px;border-radius:20px;font-size:13px;cursor:pointer}
+.lang-btn.active{background:var(--green-dim);border-color:var(--green);color:var(--text)}
+.hero{position:relative;height:240px;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,26,18,.1),rgba(15,26,18,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.hero-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px}
+.hero-title{font-size:32px;font-weight:700;color:#fff;line-height:1.1}
+.hero-sub{font-size:14px;color:var(--muted);margin-top:4px}
+.tab-bar{position:sticky;top:41px;z-index:90;background:var(--card);border-bottom:1px solid var(--border);display:flex;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 14px 8px;border:none;background:none;color:var(--muted);font-size:10px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab-btn .ti{font-size:20px}
+.tab-btn.active{color:var(--green);border-bottom-color:var(--green)}
+.tab-panel{display:none;padding:16px}
+.tab-panel.active{display:block}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
+.card:last-child{margin-bottom:0}
+.ch{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card2);border-bottom:1px solid var(--border)}
+.ci{font-size:18px}.ct{font-size:14px;font-weight:600;color:var(--gold)}
+.cb{padding:12px 16px}
+.ii{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.ii:last-child{border-bottom:none}
+.id{color:var(--green);font-size:16px;margin-top:2px;flex-shrink:0}
+.it{font-size:14px}
+.il{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.wb{background:rgba(224,123,57,.12);border:1px solid rgba(224,123,57,.4);border-radius:10px;padding:11px 13px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
+.wi{font-size:16px;flex-shrink:0;margin-top:1px}.wt{font-size:13px;color:#f0b070;line-height:1.5}
+.vb{display:flex;align-items:center;gap:12px;background:var(--green-dim);border:1px solid var(--green);border-radius:10px;padding:12px 16px;margin-top:10px;text-decoration:none;color:var(--text)}
+.vbi{font-size:22px}.vbt{font-size:14px;font-weight:500}.vbs{font-size:12px;color:var(--muted)}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.tc{background:var(--card2);border-radius:10px;padding:12px;text-align:center}
+.tl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.tv{font-size:24px;font-weight:700;color:var(--gold);margin-top:2px}
+.wfc{background:var(--card2);border-radius:10px;padding:12px 14px}
+.wfr{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
+.wfk{font-size:12px;color:var(--muted)}.wfv{font-size:14px;font-weight:500}
+.ri{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;align-items:flex-start}
+.ri:last-child{border-bottom:none}
+.rc{color:var(--green);flex-shrink:0;margin-top:2px}.rx{color:#e05555;flex-shrink:0;margin-top:2px}
+.cc{display:flex;align-items:center;gap:14px;padding:4px 0}
+.ca{width:44px;height:44px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.cn{font-size:15px;font-weight:600}
+.oi{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.oi:last-child{border-bottom:none}
+.oi.done{opacity:.5}
+.ocb{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);background:none;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px}
+.oi.done .ocb{background:var(--green);border-color:var(--green);color:#fff}
+.ott{font-size:14px;font-weight:600}.ots{font-size:12px;color:var(--muted);margin-top:2px}
+.opb{height:4px;background:var(--border);border-radius:2px;margin-bottom:14px;overflow:hidden}
+.opbi{height:100%;background:var(--green);border-radius:2px;transition:width .3s}
+.pi{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.pi:last-child{border-bottom:none}
+.pico{font-size:22px;flex-shrink:0;margin-top:2px}.pn{font-size:14px;font-weight:600}
+.ps{font-size:12px;color:var(--muted);margin-top:2px}
+.pl{display:inline-block;margin-top:5px;font-size:12px;color:var(--green);text-decoration:none;border:1px solid var(--green-dim);border-radius:20px;padding:2px 10px}
+.bbq-steps{background:var(--card2);border-radius:10px;border:1px solid var(--border);padding:12px 14px;margin-top:10px}
+.bbq-step-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;font-weight:500}
+.bbq-step{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.bbq-num{width:20px;height:20px;border-radius:50%;background:var(--green-dim);color:var(--text);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.bbq-txt{font-size:13px}
+.bbq-icons{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+.bbq-icon-item{text-align:center;font-size:11px;color:var(--muted)}
+.bbq-icon-item span{display:block;font-size:26px;line-height:1.3}
+.bbq-sep{font-size:18px;color:var(--muted)}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:20px 0 0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:var(--card);border-radius:20px;border:1px solid var(--border);max-width:340px;width:100%;padding:28px 24px;text-align:center}
+.modal-emoji{font-size:48px;margin-bottom:12px}
+.modal-title{font-size:18px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.modal-body{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:20px}
+.modal-btn{background:var(--green-dim);border:1px solid var(--green);color:var(--text);border-radius:12px;padding:12px 32px;font-size:15px;font-weight:600;cursor:pointer;width:100%}
 </style>
 </head>
 <body>
@@ -104,10 +101,11 @@
 <div class="tab-bar">
   <button class="tab-btn active" onclick="showTab('llegada',this)"><span class="ti">🗺️</span><span id="s-tl1">Llegada</span></button>
   <button class="tab-btn" onclick="showTab('acceso',this)"><span class="ti">🔑</span><span id="s-tl2">Acceso</span></button>
-  <button class="tab-btn" onclick="showTab('cabana',this)"><span class="ti">🏡</span><span id="s-tl3">Cabaña</span></button>
-  <button class="tab-btn" onclick="showTab('rio',this)"><span class="ti">🌊</span><span id="s-tl4">Río</span></button>
-  <button class="tab-btn" onclick="showTab('reglas',this)"><span class="ti">📋</span><span id="s-tl5">Reglas</span></button>
-  <button class="tab-btn" onclick="showTab('entorno',this)"><span class="ti">📍</span><span id="s-tl6">Entorno</span></button>
+  <button class="tab-btn" onclick="showTab('salida',this)"><span class="ti">🚪</span><span id="s-tl3">Salida</span></button>
+  <button class="tab-btn" onclick="showTab('cabana',this)"><span class="ti">🏡</span><span id="s-tl4">Cabaña</span></button>
+  <button class="tab-btn" onclick="showTab('rio',this)"><span class="ti">🌊</span><span id="s-tl5">Río</span></button>
+  <button class="tab-btn" onclick="showTab('reglas',this)"><span class="ti">📋</span><span id="s-tl6">Reglas</span></button>
+  <button class="tab-btn" onclick="showTab('entorno',this)"><span class="ti">📍</span><span id="s-tl7">Entorno</span></button>
 </div>
 
 <!-- LLEGADA -->
@@ -133,8 +131,7 @@
     <div class="ch"><span class="ci">▶️</span><span class="ct" id="s-vt">Video guía de llegada</span></div>
     <div class="cb">
       <a class="vb" href="https://rinconserenochica-pty.github.io/cabins/videos/Llegada_El_Horizonte.mov" target="_blank">
-        <span class="vbi">▶️</span>
-        <div><div class="vbt" id="s-v1">Ver video de llegada</div><div class="vbs" id="s-vs1">Instrucciones visuales paso a paso</div></div>
+        <span class="vbi">▶️</span><div><div class="vbt" id="s-v1">Ver video de llegada</div><div class="vbs" id="s-vs1">Instrucciones visuales paso a paso</div></div>
       </a>
     </div>
   </div>
@@ -159,27 +156,6 @@
     </div>
   </div>
   <div class="card">
-    <div class="ch"><span class="ci">🚪</span><span class="ct" id="s-sal-t">Instrucciones de salida</span></div>
-    <div class="cb">
-      <div class="opb"><div class="opbi" id="progress-bar" style="width:0%"></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot1">🛁 Junta las toallas usadas</div><div class="ots" id="s-os1">Dejarlas colgadas en el baño</div></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot2">🗑️ Saca la basura</div><div class="ots" id="s-os2">Contenedor cerca del estacionamiento, cercado con dos llantas</div></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot3">💡 Apaga las luces y los aparatos</div></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot4">🔒 Cierra con llave</div><div class="ots" id="s-os4">Verificar puerta del baño y puerta principal</div></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot5">🗝️ Devuelve las llaves</div><div class="ots" id="s-os5">Colocarlas en la cajilla al lado de la puerta principal y desordenar los números</div></div></div>
-      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot6">🟢 Contáctanos al portón</div><div class="ots" id="s-os6">Al llegar al portón principal verde, escríbenos para abrirlo remotamente</div></div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ch"><span class="ci">▶️</span><span class="ct" id="s-vst">Video de salida</span></div>
-    <div class="cb">
-      <a class="vb" href="https://rinconserenochica-pty.github.io/cabins/videos/video_salida.mov" target="_blank">
-        <span class="vbi">▶️</span>
-        <div><div class="vbt" id="s-vs2">Ver video de salida</div><div class="vbs" id="s-vss2">Ruta alterna con pendientes más suaves</div></div>
-      </a>
-    </div>
-  </div>
-  <div class="card">
     <div class="ch"><span class="ci">📶</span><span class="ct">WiFi</span></div>
     <div class="cb">
       <div class="wfc">
@@ -196,6 +172,30 @@
   </div>
 </div>
 
+<!-- SALIDA -->
+<div id="panel-salida" class="tab-panel">
+  <div class="card">
+    <div class="ch"><span class="ci">✅</span><span class="ct" id="s-sal-t">Instrucciones de salida</span></div>
+    <div class="cb">
+      <div class="opb"><div class="opbi" id="progress-bar" style="width:0%"></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot1">🛁 Junta las toallas usadas</div><div class="ots" id="s-os1">Dejarlas colgadas en el baño</div></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot2">🗑️ Saca la basura</div><div class="ots" id="s-os2">Contenedor cerca del estacionamiento, cercado con dos llantas</div></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot3">💡 Apaga las luces y los aparatos</div></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot5">🔒 Cierra con llave</div><div class="ots" id="s-os5">Verificar puerta del baño y puerta principal</div></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot6">🗝️ Devuelve las llaves</div><div class="ots" id="s-os6">Colocarlas en la cajilla al lado de la puerta principal y desordenar los números</div></div></div>
+      <div class="oi" onclick="toggleCheck(this)"><div class="ocb"></div><div><div class="ott" id="s-ot7">🟢 Contáctanos al portón</div><div class="ots" id="s-os7">Al llegar al portón principal verde, escríbenos para abrirlo remotamente</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><span class="ci">▶️</span><span class="ct" id="s-vst">Video de salida</span></div>
+    <div class="cb">
+      <a class="vb" href="https://rinconserenochica-pty.github.io/cabins/videos/video_salida.mov" target="_blank">
+        <span class="vbi">▶️</span><div><div class="vbt" id="s-vs2">Ver video de salida</div><div class="vbs" id="s-vss2">Ruta alterna con pendientes más suaves</div></div>
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- CABAÑA -->
 <div id="panel-cabana" class="tab-panel">
   <div class="card">
@@ -203,6 +203,10 @@
     <div class="cb">
       <div class="ii"><span class="id">🌿</span><div><div class="il" id="s-ext-l">Área exterior</div><div class="it" id="s-ext">Luces solares automáticas. Lonas manuales para lluvia, sol o brisa.</div></div></div>
       <div class="ii"><span class="id">🚿</span><div><div class="il" id="s-ban-l">Baño</div><div class="it" id="s-ban">Mueble chocolate junto a la puerta: <strong>toalla extra para secar el piso</strong>. Hay opción para calentar el agua; no contamos con agua caliente instantánea.</div></div></div>
+      <div class="ii" style="border-bottom:none"><span class="id">🗄️</span><div>
+        <div class="il" id="s-cont-l">Contenedores de almacenamiento</div>
+        <div class="it" id="s-cont-txt">De vez en cuando algún perrito travieso del vecindario aparece a explorar el área de cocina 🐕. Para que nadie se adelante a comerse tu desayuno, encontrarás contenedores elevados donde guardar tus alimentos seguros durante la noche.</div>
+      </div></div>
       <div class="ii" style="border-bottom:none"><span class="id">🔥</span><div style="flex:1">
         <div class="il" id="s-bbq-l">Área de asado (BBQ)</div>
         <div class="it" id="s-bbq">Disponible para todos los huéspedes. <strong>Carbón no incluido</strong> — favor traer el propio.</div>
@@ -233,6 +237,7 @@
       <div class="ii"><span class="id">↘️</span><div class="it" id="s-ra">Baja por las <strong>escaleras cerca del baño</strong>.</div></div>
       <div class="ii"><span class="id">➡️</span><div><div class="il" id="s-der-l">Derecha</div><div class="it" id="s-der"><strong>Rincón de La Pozita</strong> — área de baño en el río (~4 min)</div></div></div>
       <div class="ii"><span class="id">⬅️</span><div><div class="il" id="s-izq-l">Izquierda</div><div class="it" id="s-izq"><strong>Rincón de La Cascada</strong> — mirador a la cascada grande</div></div></div>
+      <div class="wb"><span class="wi">🌧️</span><div class="wt" id="s-rio-warn">En caso de lluvia o después de lluvias recientes, <strong>no se recomienda acceder al río</strong>. El nivel y la corriente pueden aumentar de forma rápida.</div></div>
     </div>
   </div>
 </div>
@@ -282,32 +287,29 @@
   <p style="margin-top:4px" id="s-foot2">Estamos en línea para cualquier consulta.</p>
 </div>
 
-
 <script>
-var T = { es: {"s-hero": "Guía para huéspedes", "s-tl1": "Llegada", "s-tl2": "Acceso", "s-tl3": "Cabaña", "s-tl4": "Río", "s-tl5": "Reglas", "s-tl6": "Entorno", "s-waze": "Destino en Waze", "s-ruta-l": "Ruta recomendada", "s-ruta": "Bejuco → Sorá (más directa que por el pueblo de Chicá)", "s-pasos": "Instrucciones paso a paso", "s-p1": "Al llegar al <strong>portón verde</strong> de la entrada principal, contáctanos para abrirlo remotamente.", "s-p2": "Sigue todo el camino de tosca sin desviarte. Al encontrar una loma con vereda tipo calle: <strong>sube por allí</strong>.", "s-p3": "En la intersección en Y: <strong>toma a la derecha</strong>. A ~200m, gira a la <strong>izquierda</strong> (Calle del Río) y sigue derecho.", "s-p4": "Llegarás a una bajada de tosca. Al final, portón verde a la derecha: sube en cambio de mayor fuerza (L o 1a) <strong>sin parar</strong>.", "s-sedan": "Hay una loma desafiante para sedanes al llegar. <strong>No te preocupes:</strong> la salida es por ruta alterna con pendientes más suaves.", "s-vt": "Video guía de llegada", "s-v1": "Ver video de llegada", "s-vs1": "Instrucciones visuales paso a paso", "s-acceso": "Llaves & Portón", "s-caj-l": "Ver información →", "s-caj": "Al <strong>lado de la puerta principal</strong>.", "s-ctrl-l": "Control remoto", "s-ctrl": "Abre el portón verde durante tu estadía. <strong>Botón izquierdo superior.</strong>", "s-hor": "Horarios", "s-ci-l": "Check-in", "s-co-l": "Check-out", "s-sal-t": "Instrucciones de salida", "s-ot1": "🛁 Junta las toallas usadas", "s-os1": "Dejarlas colgadas en el baño", "s-ot2": "🗑️ Saca la basura", "s-os2": "Contenedor cerca del estacionamiento, cercado con dos llantas", "s-ot3": "💡 Apaga las luces y los aparatos", "s-ot4": "🔒 Cierra con llave", "s-os4": "Verificar puerta del baño y puerta principal", "s-ot5": "🗝️ Devuelve las llaves", "s-os5": "Colocarlas en la cajilla al lado de la puerta principal y desordenar los números", "s-ot6": "🟢 Contáctanos al portón", "s-os6": "Al llegar al portón principal verde, escríbenos para abrirlo remotamente", "s-vst": "Video de salida", "s-vs2": "Ver video de salida", "s-vss2": "Ruta alterna con pendientes más suaves", "s-red": "Red", "s-pass": "Contraseña", "s-cont": "Contacto de Emergencia", "s-sis": "Sistemas & Amenidades", "s-ext-l": "Área exterior", "s-ext": "Luces solares automáticas. Lonas manuales para lluvia, sol o brisa.", "s-ban-l": "Baño", "s-ban": "Mueble chocolate junto a la puerta: <strong>toalla extra para secar el piso</strong>. Hay opción para calentar el agua; no contamos con agua caliente instantánea.", "s-bbq-l": "Área de asado (BBQ)", "s-bbq": "Disponible para todos los huéspedes. <strong>Carbón no incluido</strong> — favor traer el propio.", "s-bbq-how": "Cómo encender el carbón", "s-bbq-1": "Humedece cartón de envase de huevos con <strong>aceite reciclado</strong> (provisto en la cabaña).", "s-bbq-2": "Apila los carbones formando un <strong>volcán</strong> — un cono con espacio en el centro.", "s-bbq-3": "Coloca el cartón húmedo en el centro del volcán y enciéndelo.", "s-bbq-ic1": "Cartón + aceite", "s-bbq-ic2": "Volcán de carbón", "s-bbq-ic3": "Fuego perfecto", "s-sol": "Sistema de energía solar. <strong>No usar</strong> resistencias eléctricas: blowers, planchas, ni aparatos similares.", "s-rio": "Acceso al Río", "s-ra": "Baja por las <strong>escaleras cerca del baño</strong>.", "s-der-l": "Derecha", "s-der": "<strong>Rincón de La Pozita</strong> — área de baño en el río (~4 min)", "s-izq-l": "Izquierda", "s-izq": "<strong>Rincón de La Cascada</strong> — mirador a la cascada grande", "s-reg": "Normas de la Cabaña", "s-r1": "Dejar la basura en el contenedor contiguo al estacionamiento al salir.", "s-r2": "Horario de silencio: <strong>11pm – 8am</strong>", "s-r3": "Se puede fumar únicamente en las <strong>áreas exteriores</strong> de la cabaña.", "s-r4": "🚽 Depositar <strong>únicamente papel higiénico</strong> en el inodoro. Preservativos, toallitas y cualquier otro material no biodegradable deben ir en el basurero del baño.", "s-r5": "Se permiten mascotas. Favor recoger los desechos.", "s-r6": "No usar resistencias eléctricas (blowers, planchas, etc.).", "s-nat": "Naturaleza", "s-send-n": "Sendero La Cruz", "s-send-s": "Parque Nacional Altos de Campana", "s-send-l": "Ver información →", "s-caj-n": "Los Cajones de Chame", "s-caj-s": "Formaciones naturales de roca en el río", "s-com": "Dónde comer", "s-piz-s": "Altos del María", "s-ter-n": "Terraza de Coronado", "s-ter-s": "Restaurantes y tiendas de conveniencia", "s-comp": "Compras", "s-mini-s": "Minimarket cerca de Rincón Sereno", "s-riba-s": "Supermercado completo — Coronado", "s-foot": "¡Bienvenidos a <span style='color:var(--green)'>Rincón Sereno</span>! 🌿", "s-foot2": "Estamos en línea para cualquier consulta."}, en: {"s-hero": "Guest Guide", "s-tl1": "Arrival", "s-tl2": "Access", "s-tl3": "Cabin", "s-tl4": "River", "s-tl5": "Rules", "s-tl6": "Nearby", "s-waze": "Waze Destination", "s-ruta-l": "Recommended Route", "s-ruta": "Bejuco → Sorá (more direct than through Chicá town)", "s-pasos": "Step-by-step directions", "s-p1": "When you reach the <strong>green gate</strong> at the main entrance, contact us to open it remotely.", "s-p2": "Follow the gravel road without turning off. When you find a hill with a lane-style path: <strong>go up that way</strong>.", "s-p3": "At the Y intersection: <strong>turn right</strong>. After ~200m, turn <strong>left</strong> (Calle del Río) and go straight.", "s-p4": "You will reach a gravel descent. At the end, green gate on the right: go up in lowest gear (L or 1st) <strong>without stopping</strong>.", "s-sedan": "One hill may be challenging for sedans. <strong>No worries:</strong> the exit uses an alternate route with gentler slopes.", "s-vt": "Arrival video guide", "s-v1": "Watch arrival video", "s-vs1": "Step-by-step visual instructions", "s-acceso": "Keys & Gate", "s-caj-l": "More info →", "s-caj": "<strong>Next to the main door</strong>.", "s-ctrl-l": "Remote control", "s-ctrl": "Opens the green gate during your stay. <strong>Upper left button.</strong>", "s-hor": "Schedule", "s-ci-l": "Check-in", "s-co-l": "Check-out", "s-sal-t": "Checkout instructions", "s-ot1": "🛁 Gather used towels", "s-os1": "Leave them hanging in the bathroom", "s-ot2": "🗑️ Take out the trash", "s-os2": "Container near the parking area, enclosed with two tires", "s-ot3": "💡 Turn off lights and appliances", "s-ot4": "🔒 Lock up", "s-os4": "Check bathroom door and main door", "s-ot5": "🗝️ Return the keys", "s-os5": "Place them back in the lockbox by the main door and scramble the numbers", "s-ot6": "🟢 Contact us at the gate", "s-os6": "When you reach the main green gate, message us to open it remotely", "s-vst": "Departure video", "s-vs2": "Watch departure video", "s-vss2": "Alternate route with gentler slopes", "s-red": "Network", "s-pass": "Password", "s-cont": "Emergency Contact", "s-sis": "Systems & Amenities", "s-ext-l": "Exterior area", "s-ext": "Automatic solar lights. Manual awnings for rain, sun, or breeze.", "s-ban-l": "Bathroom", "s-ban": "Dark brown cabinet by the door has an <strong>extra floor towel</strong>. Option to heat water; no instant hot water.", "s-bbq-l": "BBQ area", "s-bbq": "Available for all guests. <strong>Charcoal not included</strong> — please bring your own.", "s-bbq-how": "How to light the charcoal", "s-bbq-1": "Soak egg carton cardboard with <strong>recycled oil</strong> (provided at the cabin).", "s-bbq-2": "Stack the charcoal into a <strong>volcano</strong> shape — a cone with an opening in the center.", "s-bbq-3": "Place the soaked cardboard in the center of the volcano and light it.", "s-bbq-ic1": "Cardboard + oil", "s-bbq-ic2": "Charcoal volcano", "s-bbq-ic3": "Perfect fire", "s-sol": "Solar energy system. <strong>Do not use</strong> electric heaters: hair dryers, flat irons, or similar.", "s-rio": "River Access", "s-ra": "Go down the <strong>stairs near the bathroom</strong>.", "s-der-l": "Right", "s-der": "<strong>Rincón de La Pozita</strong> — swimming area (~4 min)", "s-izq-l": "Left", "s-izq": "<strong>Rincón de La Cascada</strong> — viewpoint to the large waterfall", "s-reg": "Cabin Rules", "s-r1": "Leave trash in the container next to the parking area before checkout.", "s-r2": "Quiet hours: <strong>11pm – 8am</strong>", "s-r3": "Smoking is allowed in <strong>outdoor areas only</strong>.", "s-r4": "🚽 Please flush <strong>toilet paper only</strong>. Condoms, wipes, and any other non-biodegradable materials must go in the bathroom trash bin.", "s-r5": "Pets welcome. Please clean up after them.", "s-r6": "No electric heaters allowed (hair dryers, flat irons, etc.).", "s-nat": "Nature", "s-send-n": "Sendero La Cruz Trail", "s-send-s": "Altos de Campana National Park", "s-send-l": "More info →", "s-caj-n": "Los Cajones de Chame", "s-caj-s": "Natural rock formations along the river", "s-com": "Where to eat", "s-piz-s": "Altos del María", "s-ter-n": "Terraza de Coronado", "s-ter-s": "Restaurants and convenience stores", "s-comp": "Shopping", "s-mini-s": "Minimarket near Rincón Sereno", "s-riba-s": "Full supermarket — Coronado", "s-foot": "Welcome to <span style='color:var(--green)'>Rincón Sereno</span>! 🌿", "s-foot2": "We are online for any questions."} };
-function showTab(name, btn) {
+var T={es:{"s-hero": "Guía para huéspedes", "s-tl1": "Llegada", "s-tl2": "Acceso", "s-tl3": "Salida", "s-tl4": "Cabaña", "s-tl5": "Río", "s-tl6": "Reglas", "s-tl7": "Entorno", "s-waze": "Destino en Waze", "s-ruta-l": "Ruta recomendada", "s-ruta": "Bejuco → Sorá (más directa que por el pueblo de Chicá)", "s-pasos": "Instrucciones paso a paso", "s-p1": "Al llegar al <strong>portón verde</strong> de la entrada principal, contáctanos para abrirlo remotamente.", "s-p2": "Sigue todo el camino de tosca sin desviarte. Al encontrar una loma con vereda tipo calle: <strong>sube por allí</strong>.", "s-p3": "En la intersección en Y: <strong>toma a la derecha</strong>. A ~200m, gira a la <strong>izquierda</strong> (Calle del Río) y sigue derecho.", "s-p4": "Llegarás a una bajada de tosca. Al final, portón verde a la derecha: sube en cambio de mayor fuerza (L o 1a) <strong>sin parar</strong>.", "s-sedan": "Hay una loma desafiante para sedanes al llegar. <strong>No te preocupes:</strong> la salida es por ruta alterna con pendientes más suaves.", "s-vt": "Video guía de llegada", "s-v1": "Ver video de llegada", "s-vs1": "Instrucciones visuales paso a paso", "s-acceso": "Llaves & Portón", "s-caj-l": "Ver información →", "s-caj": "Al <strong>lado de la puerta principal</strong>.", "s-ctrl-l": "Control remoto", "s-ctrl": "Abre el portón verde durante tu estadía. <strong>Botón izquierdo superior.</strong>", "s-hor": "Horarios", "s-ci-l": "Check-in", "s-co-l": "Check-out", "s-red": "Red", "s-pass": "Contraseña", "s-cont": "Contacto de Emergencia", "s-sal-t": "Instrucciones de salida", "s-ot1": "🛁 Junta las toallas usadas", "s-os1": "Dejarlas colgadas en el baño", "s-ot2": "🗑️ Saca la basura", "s-os2": "Contenedor cerca del estacionamiento, cercado con dos llantas", "s-ot3": "💡 Apaga las luces y los aparatos", "s-ot5": "🔒 Cierra con llave", "s-os5": "Verificar puerta del baño y puerta principal", "s-ot6": "🗝️ Devuelve las llaves", "s-os6": "Colocarlas en la cajilla al lado de la puerta principal y desordenar los números", "s-ot7": "🟢 Contáctanos al portón", "s-os7": "Al llegar al portón principal verde, escríbenos para abrirlo remotamente", "s-vst": "Video de salida", "s-vs2": "Ver video de salida", "s-vss2": "Ruta alterna con pendientes más suaves", "s-sis": "Sistemas & Amenidades", "s-ext-l": "Área exterior", "s-ext": "Luces solares automáticas. Lonas manuales para lluvia, sol o brisa.", "s-ban-l": "Baño", "s-ban": "Mueble chocolate junto a la puerta: <strong>toalla extra para secar el piso</strong>. Hay opción para calentar el agua; no contamos con agua caliente instantánea.", "s-bbq-l": "Área de asado (BBQ)", "s-bbq": "Disponible para todos los huéspedes. <strong>Carbón no incluido</strong> — favor traer el propio.", "s-bbq-how": "Cómo encender el carbón", "s-bbq-1": "Humedece cartón de envase de huevos con <strong>aceite reciclado</strong> (provisto en la cabaña).", "s-bbq-2": "Apila los carbones formando un <strong>volcán</strong> — un cono con espacio en el centro.", "s-bbq-3": "Coloca el cartón húmedo en el centro del volcán y enciéndelo.", "s-bbq-ic1": "Cartón + aceite", "s-bbq-ic2": "Volcán de carbón", "s-bbq-ic3": "Fuego perfecto", "s-sol": "Sistema de energía solar. <strong>No usar</strong> resistencias eléctricas: blowers, planchas, ni aparatos similares.", "s-rio": "Acceso al Río", "s-ra": "Baja por las <strong>escaleras cerca del baño</strong>.", "s-der-l": "Derecha", "s-der": "<strong>Rincón de La Pozita</strong> — área de baño en el río (~4 min)", "s-izq-l": "Izquierda", "s-izq": "<strong>Rincón de La Cascada</strong> — mirador a la cascada grande", "s-rio-warn": "En caso de lluvia o después de lluvias recientes, <strong>no se recomienda acceder al río</strong>. El nivel y la corriente pueden aumentar de forma rápida.", "s-reg": "Normas de la Cabaña", "s-r1": "Dejar la basura en el contenedor contiguo al estacionamiento al salir.", "s-r2": "Horario de silencio: <strong>11pm – 8am</strong>", "s-r3": "Se puede fumar únicamente en las <strong>áreas exteriores</strong> de la cabaña.", "s-r4": "🚽 Depositar <strong>únicamente papel higiénico</strong> en el inodoro. Preservativos, toallitas y cualquier otro material no biodegradable deben ir en el basurero del baño.", "s-r5": "Se permiten mascotas. Favor recoger los desechos.", "s-r6": "No usar resistencias eléctricas (blowers, planchas, etc.).", "s-nat": "Naturaleza", "s-send-n": "Sendero La Cruz", "s-send-s": "Parque Nacional Altos de Campana", "s-send-l": "Ver información →", "s-caj-n": "Los Cajones de Chame", "s-caj-s": "Formaciones naturales de roca en el río", "s-com": "Dónde comer", "s-piz-s": "Altos del María", "s-ter-n": "Terraza de Coronado", "s-ter-s": "Restaurantes y tiendas de conveniencia", "s-comp": "Compras", "s-mini-s": "Minimarket cerca de Rincón Sereno", "s-riba-s": "Supermercado completo — Coronado", "s-foot": "¡Bienvenidos a <span style='color:var(--green)'>Rincón Sereno</span>! 🌿", "s-foot2": "Estamos en línea para cualquier consulta.", "s-cont-l": "Contenedores de almacenamiento", "s-cont-txt": "De vez en cuando algún perrito travieso del vecindario aparece a explorar el área de cocina 🐕. Para que nadie se adelante a comerse tu desayuno, encontrarás contenedores elevados donde guardar tus alimentos seguros durante la noche."},en:{"s-hero": "Guest Guide", "s-tl1": "Arrival", "s-tl2": "Access", "s-tl3": "Checkout", "s-tl4": "Cabin", "s-tl5": "River", "s-tl6": "Rules", "s-tl7": "Nearby", "s-waze": "Waze Destination", "s-ruta-l": "Recommended Route", "s-ruta": "Bejuco → Sorá (more direct than through Chicá town)", "s-pasos": "Step-by-step directions", "s-p1": "When you reach the <strong>green gate</strong> at the main entrance, contact us to open it remotely.", "s-p2": "Follow the gravel road without turning off. When you find a hill with a lane-style path: <strong>go up that way</strong>.", "s-p3": "At the Y intersection: <strong>turn right</strong>. After ~200m, turn <strong>left</strong> (Calle del Río) and go straight.", "s-p4": "You will reach a gravel descent. At the end, green gate on the right: go up in lowest gear (L or 1st) <strong>without stopping</strong>.", "s-sedan": "One hill may be challenging for sedans. <strong>No worries:</strong> the exit uses an alternate route with gentler slopes.", "s-vt": "Arrival video guide", "s-v1": "Watch arrival video", "s-vs1": "Step-by-step visual instructions", "s-acceso": "Keys & Gate", "s-caj-l": "More info →", "s-caj": "<strong>Next to the main door</strong>.", "s-ctrl-l": "Remote control", "s-ctrl": "Opens the green gate during your stay. <strong>Upper left button.</strong>", "s-hor": "Schedule", "s-ci-l": "Check-in", "s-co-l": "Check-out", "s-red": "Network", "s-pass": "Password", "s-cont": "Emergency Contact", "s-sal-t": "Checkout instructions", "s-ot1": "🛁 Gather used towels", "s-os1": "Leave them hanging in the bathroom", "s-ot2": "🗑️ Take out the trash", "s-os2": "Container near the parking area, enclosed with two tires", "s-ot3": "💡 Turn off lights and appliances", "s-ot5": "🔒 Lock up", "s-os5": "Check bathroom door and main door", "s-ot6": "🗝️ Return the keys", "s-os6": "Place them back in the lockbox by the main door and scramble the numbers", "s-ot7": "🟢 Contact us at the gate", "s-os7": "When you reach the main green gate, message us to open it remotely", "s-vst": "Departure video", "s-vs2": "Watch departure video", "s-vss2": "Alternate route with gentler slopes", "s-sis": "Systems & Amenities", "s-ext-l": "Exterior area", "s-ext": "Automatic solar lights. Manual awnings for rain, sun, or breeze.", "s-ban-l": "Bathroom", "s-ban": "Dark brown cabinet by the door has an <strong>extra floor towel</strong>. Option to heat water; no instant hot water.", "s-bbq-l": "BBQ area", "s-bbq": "Available for all guests. <strong>Charcoal not included</strong> — please bring your own.", "s-bbq-how": "How to light the charcoal", "s-bbq-1": "Soak egg carton cardboard with <strong>recycled oil</strong> (provided at the cabin).", "s-bbq-2": "Stack the charcoal into a <strong>volcano</strong> shape — a cone with an opening in the center.", "s-bbq-3": "Place the soaked cardboard in the center of the volcano and light it.", "s-bbq-ic1": "Cardboard + oil", "s-bbq-ic2": "Charcoal volcano", "s-bbq-ic3": "Perfect fire", "s-sol": "Solar energy system. <strong>Do not use</strong> electric heaters: hair dryers, flat irons, or similar.", "s-rio": "River Access", "s-ra": "Go down the <strong>stairs near the bathroom</strong>.", "s-der-l": "Right", "s-der": "<strong>Rincón de La Pozita</strong> — swimming area (~4 min)", "s-izq-l": "Left", "s-izq": "<strong>Rincón de La Cascada</strong> — viewpoint to the large waterfall", "s-rio-warn": "During rain or after recent rainfall, <strong>river access is not recommended</strong>. Water levels and currents can rise quickly.", "s-reg": "Cabin Rules", "s-r1": "Leave trash in the container next to the parking area before checkout.", "s-r2": "Quiet hours: <strong>11pm – 8am</strong>", "s-r3": "Smoking is allowed in <strong>outdoor areas only</strong>.", "s-r4": "🚽 Please flush <strong>toilet paper only</strong>. Condoms, wipes, and any other non-biodegradable materials must go in the bathroom trash bin.", "s-r5": "Pets welcome. Please clean up after them.", "s-r6": "No electric heaters allowed (hair dryers, flat irons, etc.).", "s-nat": "Nature", "s-send-n": "Sendero La Cruz Trail", "s-send-s": "Altos de Campana National Park", "s-send-l": "More info →", "s-caj-n": "Los Cajones de Chame", "s-caj-s": "Natural rock formations along the river", "s-com": "Where to eat", "s-piz-s": "Altos del María", "s-ter-n": "Terraza de Coronado", "s-ter-s": "Restaurants and convenience stores", "s-comp": "Shopping", "s-mini-s": "Minimarket near Rincón Sereno", "s-riba-s": "Full supermarket — Coronado", "s-foot": "Welcome to <span style='color:var(--green)'>Rincón Sereno</span>! 🌿", "s-foot2": "We are online for any questions.", "s-cont-l": "Storage containers", "s-cont-txt": "Every now and then a sneaky neighborhood pup wanders into the kitchen area 🐕. To make sure nobody beats you to breakfast, you will find elevated containers to keep your food safe overnight."}};
+function closeModal(){document.getElementById('modal').style.display='none';}
+function showTab(name,btn){
   document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
-  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
   btn.classList.add('active');
   btn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
-function toggleCheck(item) {
+function toggleCheck(item){
   item.classList.toggle('done');
-  item.querySelector('.ocb').innerHTML = item.classList.contains('done') ? '✓' : '';
-  var all = document.querySelectorAll('.oi').length;
-  var done = document.querySelectorAll('.oi.done').length;
-  document.getElementById('progress-bar').style.width = Math.round(done/all*100) + '%';
+  item.querySelector('.ocb').innerHTML=item.classList.contains('done')?'✓':'';
+  var all=document.querySelectorAll('.oi').length;
+  var done=document.querySelectorAll('.oi.done').length;
+  document.getElementById('progress-bar').style.width=Math.round(done/all*100)+'%';
 }
-function setLang(lang) {
-  var t = T[lang];
-  for (var id in t) {
-    var el = document.getElementById(id);
-    if (el) el.innerHTML = t[id];
-  }
-  document.getElementById('btn-es').classList.toggle('active', lang==='es');
-  document.getElementById('btn-en').classList.toggle('active', lang==='en');
-  document.documentElement.lang = lang;
+function setLang(lang){
+  var t=T[lang];
+  for(var id in t){var el=document.getElementById(id);if(el)el.innerHTML=t[id];}
+  document.getElementById('btn-es').classList.toggle('active',lang==='es');
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  document.documentElement.lang=lang;
 }
 </script>
 </body>
