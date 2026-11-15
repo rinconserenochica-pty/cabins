@@ -75,7 +75,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .bbq-sep{font-size:18px;color:var(--muted)}
 .arr{--bg:#0f1a12;--surface:#162019;--ink:#e8ede9;--muted:#9aaa9f;--sign:#1f6b3a;--sign-ink:#fff;--gate:#3ba34a;--amber:#f2b500;--amber-ink:#2a2200;--road:#33433a;--road-main:#4a5c50;--line:#2a3d2e;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.4;-webkit-text-size-adjust:100%}
 .arr *,.arr *::before,.arr *::after{box-sizing:border-box}
-.arr .subline{margin:0 0 10px;color:var(--muted);font-size:.95rem}
 .arr details.pre{margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
 .arr details.pre summary{padding:10px 12px;cursor:pointer;font-weight:600}
 .arr details.pre ol{margin:0;padding:0 14px 12px 32px}
@@ -88,6 +87,8 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 .arr .video video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
 .arr .vbtn{position:absolute;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font:inherit;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer}
 .arr .sound{right:8px;top:8px;width:36px;height:36px;justify-content:center;font-size:1rem}
+.arr .startbig{left:50%;top:50%;transform:translate(-50%,-50%);padding:12px 22px;font-size:1.05rem;font-weight:800;background:var(--gate);box-shadow:0 4px 14px rgba(0,0,0,.5);white-space:nowrap}
+.arr .startbig[hidden]{display:none}
 .arr .again{left:8px;bottom:14px;padding:8px 12px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .25s}
 .arr .again.show{opacity:1;pointer-events:auto}
 .arr .status{position:absolute;left:8px;top:8px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;font-weight:600;opacity:0;transition:opacity .25s}
@@ -168,7 +169,6 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 <!-- LLEGADA -->
 <div id="panel-llegada" class="tab-panel active">
 <div class="arr">
-  <p class="subline" data-t="sub"></p>
   <details class="pre">
     <summary data-t="preTitle"></summary>
     <ol><li data-t="pre1"></li><li data-t="pre2"></li><li data-t="pre3"></li></ol>
@@ -207,6 +207,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
     <div class="video">
       <video id="v" playsinline webkit-playsinline muted preload="auto" poster="https://rinconserenochica-pty.github.io/cabins/llegada-nido/poster.jpg" src="https://rinconserenochica-pty.github.io/cabins/llegada-nido/nido.mp4"></video>
       <span class="status" id="status"></span>
+      <button class="vbtn startbig" id="startbig" type="button"></button>
       <button class="vbtn sound" id="sound" type="button" aria-pressed="false" aria-label="Sonido / Sound"></button>
       <button class="vbtn again" id="again" type="button"></button>
       <div class="clipbar"><i id="bar"></i></div>
@@ -568,6 +569,7 @@ function setLang(lang){
     buildChips(); render(); setStatus(statusKey);
     $('sound').textContent = v.muted?T[l].soundOff:T[l].soundOn;
     $('again').textContent = T[l].again;
+    $('startbig').textContent = '▶ ' + T[l].start;
   }
 
   let cur=0, segStart=0, segEnd=STEPS[0].stop, raf=0, statusKey='', visited=new Set([0]);
@@ -590,6 +592,7 @@ function setLang(lang){
     $('kicker').textContent = (cur===0||cur===LAST) ? tx.k : T[lang].point(cur)+(approach?'':tx.k);
     $('title').textContent=approach?tx.aT:tx.t; $('text').textContent=approach?tx.aP:tx.p;
     $('sign').classList.toggle('caution',!!s.caution && !approach);
+    $('startbig').hidden = cur!==0;
     $('prev').textContent=T[lang].prev; $('prev').disabled=cur===0;
     $('next').textContent = cur===LAST ? T[lang].restart : (cur===0?T[lang].start:T[lang].next);
     setZoom(cur>=3);
@@ -671,6 +674,7 @@ function setLang(lang){
   });
   $('next').addEventListener('click',()=>go(cur===LAST?0:cur+1));
   $('prev').addEventListener('click',()=>go(cur-1));
+  $('startbig').addEventListener('click',e=>{ e.stopPropagation(); go(1); });
   $('again').addEventListener('click',()=>playSegment(cur));
   $('sound').addEventListener('click',()=>{
     v.muted=!v.muted; $('sound').textContent=v.muted?T[lang].soundOff:T[lang].soundOn; $('sound').setAttribute('aria-pressed',!v.muted);
