@@ -49,7 +49,7 @@ details.pre li{margin:4px 0}
 
 .stage{display:grid;grid-template-columns:45% 1fr;gap:10px;align-items:stretch}
 .map{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
-.map svg{display:block;width:100%;height:100%}
+.map svg{position:absolute;inset:0;display:block;width:100%;height:100%}
 .map .scale{position:absolute;right:6px;top:4px;font-size:.62rem;color:var(--muted);max-width:40%;text-align:right;line-height:1.15}
 .video{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:9/16;max-height:62vh}
 .video video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
@@ -140,7 +140,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
     </div>
 
     <div class="video">
-      <video id="v" playsinline muted preload="auto" src="nido.mp4"></video>
+      <video id="v" playsinline webkit-playsinline muted preload="auto" poster="poster.jpg" src="nido.mp4"></video>
       <span class="status" id="status"></span>
       <button class="vbtn sound" id="sound" type="button" aria-pressed="false" aria-label="Sonido / Sound"></button>
       <button class="vbtn again" id="again" type="button"></button>
@@ -371,21 +371,33 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
   }
 
   function loop(){
+    tick();
+    if(!v.paused && !atStop) raf=requestAnimationFrame(loop);
+  }
+  // también en timeupdate: en iPhone el ciclo de animación puede detenerse
+  let atStop=false;
+  function tick(){
+    if(atStop) return;
     const t=v.currentTime;
     $('bar').style.width=Math.max(0,Math.min(100,(t-segStart)/(segEnd-segStart)*100))+'%';
     setFrac(fracAt(t));
-    if(t>=segEnd-0.03){ arrived(); return; }
-    if(!v.paused) raf=requestAnimationFrame(loop);
+    if(t>=segEnd-0.03){ atStop=true; arrived(); }
   }
+  v.addEventListener('timeupdate',()=>{ if(!v.paused) tick(); });
 
   // reproduce el tramo que lleva al punto i
   function playSegment(i){
     segStart = i===0 ? 0 : STEPS[i-1].stop; segEnd = STEPS[i].stop;
     $('again').classList.remove('show'); $('next').classList.remove('ready');
-    cancelAnimationFrame(raf);
-    if(Math.abs(v.currentTime-segStart)>0.25){ try{ v.currentTime=segStart; }catch(e){} }
+    cancelAnimationFrame(raf); atStop=false;
     setStatus('playing');
+    const needSeek=Math.abs(v.currentTime-segStart)>0.25;
+    if(needSeek && v.readyState>=1){ try{ v.currentTime=segStart; }catch(e){} }
+    // play() debe ir directo del toque del usuario (requisito de iPhone)
     const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{ setStatus('paused'); });
+    if(needSeek && v.readyState<1){
+      v.addEventListener('loadedmetadata',()=>{ try{ v.currentTime=segStart; }catch(e){} },{once:true});
+    }
   }
 
   function go(i){
