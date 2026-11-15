@@ -168,7 +168,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
 
   <p class="foot" data-t="foot"></p>
   <p id="diag" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:#b3261e;color:#fff;font-size:.8rem"></p>
-  <p class="foot" style="margin-top:6px;opacity:.6">v4</p>
+  <p class="foot" style="margin-top:6px;opacity:.6">v5</p>
 </div>
 
 <script>
@@ -191,7 +191,7 @@ window.addEventListener('error',function(e){
       soundOn:'🔊', soundOff:'🔇', again:'↻ Repetir tramo',
       prev:'Anterior', next:'Siguiente punto', start:'Empezar', restart:'Volver al inicio',
       playing:'En camino…', arrived:'✓ Llegaste', paused:'Pausa · toca para seguir',
-      foot:'Para salir de Rincón Sereno usa la ruta de salida (línea amarilla punteada en el mapa): tiene pendientes más suaves, apta para autos sedanes, y termina en el punto 2. No la uses para llegar.',
+      foot:'Para salir de Rincón Sereno usa la ruta de salida (línea gris punteada en el mapa): tiene pendientes más suaves, apta para autos sedanes, y termina en el punto 2. No la uses para llegar.',
       exit:'Salida',
       chipStart:'Portón', chipEnd:'Llegada', point:n=>`Punto ${n} de 6`,
       steps:[
@@ -217,7 +217,7 @@ window.addEventListener('error',function(e){
       soundOn:'🔊', soundOff:'🔇', again:'↻ Replay section',
       prev:'Back', next:'Next point', start:'Start', restart:'Back to start',
       playing:'On the way…', arrived:'✓ You’re here', paused:'Paused · tap to resume',
-      foot:'To leave Rincón Sereno, use the exit route (dashed yellow line on the map): it has gentler slopes, suits sedans, and ends at point 2. Don’t use it to arrive.',
+      foot:'To leave Rincón Sereno, use the exit route (dashed gray line on the map): it has gentler slopes, suits sedans, and ends at point 2. Don’t use it to arrive.',
       exit:'Exit',
       chipStart:'Gate', chipEnd:'Arrival', point:n=>`Point ${n} of 6`,
       steps:[
@@ -245,7 +245,7 @@ window.addEventListener('error',function(e){
   // stop = segundo del video donde se pausa al llegar a cada punto.
   // Cada tramo va del stop anterior al siguiente: el video avanza sin saltos.
   const STEPS = [
-    {icon:'start', stop:0.8,  frac:0},
+    {icon:'start', stop:0,  frac:0},
     {icon:'ref',   stop:4.1, at:[495,995], pin:[60,0]},
     {icon:'forkRight', stop:13.8, mark:12, at:[720,690], pin:[60,0]},
     {icon:'keepOn', stop:21.3, mark:18.5, at:[812,594], pin:[62,-6]},
@@ -391,7 +391,16 @@ window.addEventListener('error',function(e){
     if(t>=segEnd-0.03){ atStop=true; arrived(); }
   }
   v.addEventListener('timeupdate',()=>{ if(!v.paused) tick(); });
-  setInterval(()=>{ if(!v.paused) tick(); },120);
+  let playing=false;
+  v.addEventListener('playing',()=>{ playing=true; });
+  v.addEventListener('pause',()=>{ playing=false; });
+  v.addEventListener('ended',()=>{ playing=false; });
+  const DEBUG=/debug/.test(location.search);
+  setInterval(()=>{
+    if(playing||!v.paused) tick();
+    if(DEBUG){ const d=document.getElementById('diag'); d.style.display='block'; d.style.background='#333';
+      d.textContent='t='+v.currentTime.toFixed(2)+' seg='+segStart+'→'+segEnd+' rs='+v.readyState+' paused='+v.paused+' playing='+playing+' atStop='+atStop+' cur='+cur; }
+  },120);
 
   // reproduce el tramo que lleva al punto i
   function playSegment(i){
@@ -400,11 +409,12 @@ window.addEventListener('error',function(e){
     cancelAnimationFrame(raf); atStop=false;
     setStatus('playing');
     const needSeek=Math.abs(v.currentTime-segStart)>0.25;
-    if(needSeek && v.readyState>=1){ try{ v.currentTime=segStart; }catch(e){} }
+    if(needSeek && v.readyState>=2){ try{ v.currentTime=segStart; }catch(e){} }
     // play() debe ir directo del toque del usuario (requisito de iPhone)
     const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{ setStatus('paused'); });
-    if(needSeek && v.readyState<1){
-      v.addEventListener('loadedmetadata',()=>{ try{ v.currentTime=segStart; }catch(e){} },{once:true});
+    if(needSeek && v.readyState<2){
+      const s0=segStart;
+      v.addEventListener('canplay',()=>{ try{ v.currentTime=s0; }catch(e){} },{once:true});
     }
   }
 
