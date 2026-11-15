@@ -167,9 +167,16 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
   <div class="chips" id="chips" role="tablist"></div>
 
   <p class="foot" data-t="foot"></p>
+  <p id="diag" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:#b3261e;color:#fff;font-size:.8rem"></p>
+  <p class="foot" style="margin-top:6px;opacity:.6">v4</p>
 </div>
 
 <script>
+// Diagnóstico: si algo falla en el celular, se muestra el error en pantalla
+window.addEventListener('error',function(e){
+  var d=document.getElementById('diag');
+  if(d){ d.style.display='block'; d.textContent='Error: '+(e.message||e)+' ('+(e.lineno||'')+')'; }
+});
 (function(){
   const T = {
     es:{
@@ -384,6 +391,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
     if(t>=segEnd-0.03){ atStop=true; arrived(); }
   }
   v.addEventListener('timeupdate',()=>{ if(!v.paused) tick(); });
+  setInterval(()=>{ if(!v.paused) tick(); },120);
 
   // reproduce el tramo que lleva al punto i
   function playSegment(i){
