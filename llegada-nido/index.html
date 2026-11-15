@@ -168,7 +168,7 @@ button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outlin
 
   <p class="foot" data-t="foot"></p>
   <p id="diag" style="display:none;margin-top:8px;padding:8px;border-radius:8px;background:#b3261e;color:#fff;font-size:.8rem"></p>
-  <p class="foot" style="margin-top:6px;opacity:.6">v5</p>
+  <p class="foot" style="margin-top:6px;opacity:.6">v6</p>
 </div>
 
 <script>
@@ -201,7 +201,7 @@ window.addEventListener('error',function(e){
         {k:'', t:'Sigue derecho por la Calle del Río', p:'A unos 200 m de la “Y”. No tomes las calles que suben.'},
         {k:'', t:'Sigue bajando', p:'La bajada es una curva pronunciada: síguela sin desviarte. Hay una calle que sube: no la tomes.'},
         {k:'', t:'Sigue bajando', p:'Hay otra calle que sube: tampoco la tomes.'},
-        {k:' · Precaución', t:'Sube la loma de Rincón Sereno, a la derecha', p:'Al final de la bajada, junto al portón verde. Usa L o primera, sube despacio y no te detengas en la loma.'},
+        {k:' · Precaución', t:'Sube la loma de Rincón Sereno, a la derecha', p:'Al final de la bajada, junto al portón verde. Usa L o primera, sube despacio y no te detengas en la loma.', aT:'Sigue bajando hasta el portón verde', aP:'Al final de la bajada verás un portón verde a la derecha.'},
         {k:'Llegada', t:'Bienvenido a El Nido', p:'El Nido es el desvío a la izquierda unos 10 m después del de El Horizonte.'}
       ]
     },
@@ -227,7 +227,7 @@ window.addEventListener('error',function(e){
         {k:'', t:'Go straight along Calle del Río', p:'About 200 m after the “Y”. Don’t take the roads going uphill.'},
         {k:'', t:'Keep going downhill', p:'The descent is a sharp curve: follow it without turning off. There’s a road going uphill: don’t take it.'},
         {k:'', t:'Keep going downhill', p:'There’s another road going uphill: don’t take that one either.'},
-        {k:' · Caution', t:'Climb the Rincón Sereno hill, on your right', p:'At the bottom of the descent, by the green gate. Use L or first gear, go slowly and don’t stop on the hill.'},
+        {k:' · Caution', t:'Climb the Rincón Sereno hill, on your right', p:'At the bottom of the descent, by the green gate. Use L or first gear, go slowly and don’t stop on the hill.', aT:'Keep going down to the green gate', aP:'At the bottom of the descent you’ll see a green gate on your right.'},
         {k:'Arrival', t:'Welcome to El Nido', p:'El Nido is the turnoff on the left, about 10 m past the one for El Horizonte.'}
       ]
     }
@@ -347,12 +347,15 @@ window.addEventListener('error',function(e){
     });
   }
 
+  // el aviso de precaución del punto 6 aparece solo al llegar (pausa)
+  let reached=false;
   function render(){
     const s=STEPS[cur], tx=T[lang].steps[cur];
-    $('icon').innerHTML=ICONS[s.icon];
-    $('kicker').textContent = (cur===0||cur===LAST) ? tx.k : T[lang].point(cur)+tx.k;
-    $('title').textContent=tx.t; $('text').textContent=tx.p;
-    $('sign').classList.toggle('caution',!!s.caution);
+    const approach = !!tx.aT && !reached;
+    $('icon').innerHTML=ICONS[approach?'keepOn':s.icon];
+    $('kicker').textContent = (cur===0||cur===LAST) ? tx.k : T[lang].point(cur)+(approach?'':tx.k);
+    $('title').textContent=approach?tx.aT:tx.t; $('text').textContent=approach?tx.aP:tx.p;
+    $('sign').classList.toggle('caution',!!s.caution && !approach);
     $('prev').textContent=T[lang].prev; $('prev').disabled=cur===0;
     $('next').textContent = cur===LAST ? T[lang].restart : (cur===0?T[lang].start:T[lang].next);
     setZoom(cur>=3);
@@ -371,6 +374,7 @@ window.addEventListener('error',function(e){
 
   function arrived(){
     v.pause(); setFrac(STEPS[cur].frac); $('bar').style.width='100%';
+    if(!reached){ reached=true; render(); }
     if(cur>=2) setZoom(true);
     setStatus(cur===0?'':'arrived');
     $('again').classList.toggle('show',cur>0);
@@ -407,6 +411,7 @@ window.addEventListener('error',function(e){
     segStart = i===0 ? 0 : STEPS[i-1].stop; segEnd = STEPS[i].stop;
     $('again').classList.remove('show'); $('next').classList.remove('ready');
     cancelAnimationFrame(raf); atStop=false;
+    if(reached && T[lang].steps[i].aT){ reached=false; render(); }
     setStatus('playing');
     const needSeek=Math.abs(v.currentTime-segStart)>0.25;
     if(needSeek && v.readyState>=2){ try{ v.currentTime=segStart; }catch(e){} }
@@ -420,7 +425,7 @@ window.addEventListener('error',function(e){
 
   function go(i){
     i=Math.max(0,Math.min(LAST,i));
-    cur=i; visited.add(i); render();
+    cur=i; visited.add(i); reached=(i===0); render();
     if(i===0){ v.pause(); cancelAnimationFrame(raf); try{ v.currentTime=STEPS[0].stop; }catch(e){} segStart=0; segEnd=STEPS[0].stop;
       setFrac(0); $('bar').style.width='0%'; setStatus(''); $('again').classList.remove('show'); return; }
     playSegment(i);
