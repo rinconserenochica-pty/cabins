@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo llegar a El Horizonte · Rincón Sereno</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Overpass:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF1EB; --surface:#FFFFFF; --ink:#16201A; --muted:#5B6A60;
+  --sign:#1F6B3A; --sign-ink:#FFFFFF; --gate:#3BA34A; --amber:#F2B500; --amber-ink:#2A2200;
+  --road:#CBD3CC; --road-main:#A9B5A6; --line:#DCE2DA;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1712; --surface:#18231C; --ink:#E5ECE6; --muted:#9AAA9F;
+    --road:#33433A; --road-main:#4A5C50; --line:#26332B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1712; --surface:#18231C; --ink:#E5ECE6; --muted:#9AAA9F;
+  --road:#33433A; --road-main:#4A5C50; --line:#26332B; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Overpass","Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.4;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:14px 14px 28px}
+
+header{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+header h1{font-size:1.5rem;font-weight:800;margin:4px 0 2px;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface);margin-top:6px}
+.lang button{font:inherit;font-weight:800;font-size:.85rem;padding:6px 11px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--sign);color:#fff}
+
+.warn{display:flex;gap:10px;align-items:flex-start;margin:12px 0;padding:10px 12px;
+  background:var(--amber);color:var(--amber-ink);border-radius:10px;font-weight:600;font-size:.95rem}
+.warn svg{flex:none;margin-top:1px}
+
+details.pre{margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details.pre summary{padding:10px 12px;cursor:pointer;font-weight:600}
+details.pre ol{margin:0;padding:0 14px 12px 32px}
+details.pre li{margin:4px 0}
+
+.stage{display:grid;grid-template-columns:45% 1fr;gap:10px;align-items:stretch}
+.map{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;position:relative}
+.map svg{position:absolute;inset:0;display:block;width:100%;height:100%}
+.map .scale{position:absolute;right:6px;top:4px;font-size:.62rem;color:var(--muted);max-width:40%;text-align:right;line-height:1.15}
+.video{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:9/16;max-height:62vh}
+.video video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
+.vbtn{position:absolute;border:0;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;
+  font:inherit;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer}
+.sound{right:8px;top:8px;width:36px;height:36px;justify-content:center;font-size:1rem}
+.again{left:8px;bottom:14px;padding:8px 12px;font-size:.85rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.again.show{opacity:1;pointer-events:auto}
+.status{position:absolute;left:8px;top:8px;max-width:calc(100% - 60px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:.8rem;font-weight:600;opacity:0;transition:opacity .25s}
+.status.show{opacity:1}
+.clipbar{position:absolute;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.25)}
+.clipbar i{display:block;height:100%;width:0;background:var(--gate)}
+
+.sign{margin-top:8px;background:var(--sign);color:var(--sign-ink);border-radius:10px;padding:3px}
+.sign-in{border:1.5px solid rgba(255,255,255,.9);border-radius:7px;padding:7px 10px;display:grid;grid-template-columns:36px 1fr;gap:9px;align-items:center}
+.sign.caution{background:var(--amber);color:var(--amber-ink)}
+.sign.caution .sign-in{border-color:var(--amber-ink)}
+.sign .icon svg{width:36px;height:36px;display:block}
+.sign .kicker{font-size:.72rem;font-weight:600;opacity:.85}
+.sign h2{margin:0;font-size:1.02rem;line-height:1.15;font-weight:800}
+.sign p{margin:2px 0 0;font-size:.85rem;line-height:1.3}
+
+.nav{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:8px}
+.nav button{font:inherit;font-weight:800;font-size:.95rem;padding:10px 10px;border-radius:9px;cursor:pointer;border:2px solid var(--sign)}
+#prev{background:transparent;color:var(--ink);border-color:var(--line)}
+#next{background:var(--gate);color:#fff;border-color:var(--gate)}
+#next.ready{animation:nudge 1.2s ease-in-out 2}
+@keyframes nudge{0%,100%{box-shadow:0 0 0 0 rgba(59,163,74,.55)}50%{box-shadow:0 0 0 8px rgba(59,163,74,0)}}
+.nav button:disabled{opacity:.4;cursor:default}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+.chips{display:flex;gap:5px;margin-top:8px;overflow-x:auto;padding-bottom:2px}
+.chips button{flex:none;font:inherit;font-size:.85rem;font-weight:600;padding:6px 10px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chips button.on{background:var(--sign);color:#fff;border-color:var(--sign)}
+.chips button.done{border-color:var(--gate)}
+.foot{margin-top:16px;font-size:.85rem;color:var(--muted)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1 data-t="h1"></h1>
+      <p data-t="sub"></p>
+    </div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" aria-pressed="true">ES</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <details class="pre">
+    <summary data-t="preTitle"></summary>
+    <ol><li data-t="pre1"></li><li data-t="pre2"></li><li data-t="pre3"></li></ol>
+  </details>
+
+  <div class="stage">
+    <div class="map" id="mapbox">
+      <svg id="map" viewBox="470 0 560 1160" preserveAspectRatio="xMidYMid meet">
+        <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M600 1148 760 1123 1060 1043 1200 997" stroke="var(--road-main)" stroke-width="20"/>
+          <g stroke="var(--road)" stroke-width="13">
+            <path d="M720 690 694 640 684 560"/>
+            <path d="M812 594 874 572 960 540"/>
+            <path d="M806 598 790 535"/>
+            <path d="M872 440 930 405"/>
+            <path d="M838 340 885 312 908 255"/>
+          </g>
+          <path id="route" d="M575 1120 490 1026 500 971 488 938 530 854 615 816 720 690 748 628 810 595C860 560 900 520 880 460L835 338 780 318 750 238 685 155 770 62" stroke="var(--sign)" stroke-opacity=".28" stroke-width="20"/>
+          <path id="done" d="M575 1120 490 1026 500 971 488 938 530 854 615 816 720 690 748 628 810 595C860 560 900 520 880 460L835 338 780 318 750 238 685 155 770 62" stroke="var(--gate)" stroke-width="20"/>
+          <path id="exit" d="M672 140 640 126 605 124 578 133 560 152 535 175 515 215 545 220 575 225 580 265 600 270 625 315 665 318 690 335 708 375 705 400 715 430 705 470 690 510 683 550 690 600 686 630 700 660 714 682" stroke="var(--muted)" stroke-opacity=".45" stroke-width="7" stroke-dasharray="12 12"/>
+        </g>
+        <path d="M676 590 688 614 700 590Z" fill="var(--muted)" fill-opacity=".5"/>
+        <text id="exitLabel" x="668" y="440" text-anchor="end" font-size="34" font-weight="600" fill="var(--muted)" fill-opacity=".75" font-family="Overpass,sans-serif">Salida</text>
+        <g id="arrows"></g>
+        <g id="pins"></g>
+        <g transform="translate(770 50) scale(1.3)">
+          <path d="M-30 6 0-24 30 6V34H-30Z" fill="var(--sign)" stroke="var(--surface)" stroke-width="5"/>
+        </g>
+        <rect x="537" y="1099" width="76" height="44" rx="7" fill="var(--gate)" stroke="var(--surface)" stroke-width="6"/>
+        <path d="M552 1108v26M567 1108v26M583 1108v26M598 1108v26" stroke="#fff" stroke-width="5"/>
+        <circle id="car" r="27" fill="#fff" stroke="var(--sign)" stroke-width="11" cx="575" cy="1120"/>
+      </svg>
+      <span class="scale" data-t="scale"></span>
+    </div>
+
+    <div class="video">
+      <video id="v" playsinline webkit-playsinline muted preload="auto" poster="poster.jpg" src="horizonte.mp4"></video>
+      <span class="status" id="status"></span>
+      <button class="vbtn sound" id="sound" type="button" aria-pressed="false" aria-label="Sonido / Sound"></button>
+      <button class="vbtn again" id="again" type="button"></button>
+      <div class="clipbar"><i id="bar"></i></div>
+    </div>
+  </div>
+
+  <section class="sign" id="sign" aria-live="polite">
+    <div class="sign-in">
+      <div class="icon" id="icon"></div>
+      <div>
+        <div class="kicker" id="kicker"></div>
+        <h2 id="title"></h2>
+        <p id="text"></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="nav">
+    <button id="prev" type="button"></button>
+    <button id="next" type="button"></button>
+  </div>
+
+  <div class="chips" id="chips" role="tablist"></div>
+
+  <p class="foot" data-t="foot"></p>
+  <p class="foot" style="margin-top:6px;opacity:.6">v2</p>
+</div>
+
+<script>
+(function(){
+  const T = {
+    es:{
+      h1:'Cómo llegar a El Horizonte',
+      sub:'Rincón Sereno · Desde el portón verde de Aires de Chicá (1.2 km)',
+      warn:'Al pasar el portón verde, ignora Waze o Google Maps y sigue solo esta guía. Ábrela antes del portón: más adelante puede no haber señal.',
+      preTitle:'Antes de llegar al portón',
+      pre1:'Pon “Aires de Chicá” en Waze.',
+      pre2:'Toma la ruta de Bejuco hacia Sorá: es más directa que entrar por el pueblo de Chicá.',
+      pre3:'Al llegar al portón verde, escríbenos por el chat de Airbnb y te lo abrimos a distancia.',
+      scale:'Esquema, no a escala', mapLabel:'Mapa esquemático de la ruta',
+      soundOn:'🔊', soundOff:'🔇', again:'↻ Repetir tramo',
+      prev:'Anterior', next:'Siguiente punto', start:'Empezar', restart:'Volver al inicio',
+      playing:'En camino…', arrived:'✓ Llegaste', paused:'Pausa · toca para seguir',
+      foot:'Para salir de Rincón Sereno usa la ruta de salida (línea gris punteada en el mapa): tiene pendientes más suaves, apta para autos sedanes, y termina en el punto 2. No la uses para llegar.',
+      exit:'Salida',
+      chipStart:'Portón', chipEnd:'Llegada', point:n=>`Punto ${n} de 6`,
+      steps:[
+        {k:'Inicio', t:'Portón verde de Aires de Chicá', p:'Escríbenos por el chat de Airbnb y te abrimos a distancia. Luego toca “Empezar”.'},
+        {k:' · Referencia', t:'Vereda tipo calle: súbela', p:'Verás una loma con una vereda tipo calle. Sube por ella siguiendo derecho, sin desviarte del camino de tosca.'},
+        {k:'', t:'En la “Y”, toma a la derecha', p:'Está en la parte más alta de la loma.'},
+        {k:'', t:'Sigue a la izquierda por la Calle del Río', p:'A unos 200 m de la “Y” verás una vereda tipo calle que sube a la derecha: no la tomes.'},
+        {k:'', t:'Sigue bajando', p:'La bajada es una curva pronunciada: síguela sin desviarte. Hay una calle que sube: no la tomes.'},
+        {k:'', t:'Sigue bajando', p:'Hay otra calle que sube: tampoco la tomes.'},
+        {k:' · Precaución', t:'Sube la loma de Rincón Sereno, a la derecha', p:'Al final de la bajada, junto al portón verde. Usa L o primera, sube despacio y no te detengas en la loma.', aT:'Sigue bajando hasta el portón verde', aP:'Al final de la bajada verás un portón verde a la derecha.'},
+        {k:'Llegada', t:'Bienvenido a El Horizonte', p:''}
+      ]
+    },
+    en:{
+      h1:'How to get to El Horizonte',
+      sub:'Rincón Sereno · From the green gate at Aires de Chicá (1.2 km)',
+      warn:'Once you pass the green gate, ignore Waze or Google Maps and follow only this guide. Open it before the gate: there may be no signal further in.',
+      preTitle:'Before you reach the gate',
+      pre1:'Enter “Aires de Chicá” in Waze.',
+      pre2:'Take the route from Bejuco toward Sorá: it’s more direct than going through the town of Chicá.',
+      pre3:'When you reach the green gate, message us through the Airbnb chat and we’ll open it remotely.',
+      scale:'Diagram, not to scale', mapLabel:'Route diagram',
+      soundOn:'🔊', soundOff:'🔇', again:'↻ Replay section',
+      prev:'Back', next:'Next point', start:'Start', restart:'Back to start',
+      playing:'On the way…', arrived:'✓ You’re here', paused:'Paused · tap to resume',
+      foot:'To leave Rincón Sereno, use the exit route (dashed gray line on the map): it has gentler slopes, suits sedans, and ends at point 2. Don’t use it to arrive.',
+      exit:'Exit',
+      chipStart:'Gate', chipEnd:'Arrival', point:n=>`Point ${n} of 6`,
+      steps:[
+        {k:'Start', t:'Green gate at Aires de Chicá', p:'Message us through the Airbnb chat and we’ll open it remotely. Then tap “Start”.'},
+        {k:' · Landmark', t:'Concrete track: drive up it', p:'You’ll see a hill with a two-strip concrete track. Drive straight up it and stay on the gravel road.'},
+        {k:'', t:'At the “Y”, keep right', p:'It’s at the highest part of the hill.'},
+        {k:'', t:'Keep left on Calle del Río', p:'About 200 m after the “Y” you’ll see a concrete track going uphill on the right: don’t take it.'},
+        {k:'', t:'Keep going downhill', p:'The descent is a sharp curve: follow it without turning off. There’s a road going uphill: don’t take it.'},
+        {k:'', t:'Keep going downhill', p:'There’s another road going uphill: don’t take that one either.'},
+        {k:' · Caution', t:'Climb the Rincón Sereno hill, on your right', p:'At the bottom of the descent, by the green gate. Use L or first gear, go slowly and don’t stop on the hill.', aT:'Keep going down to the green gate', aP:'At the bottom of the descent you’ll see a green gate on your right.'},
+        {k:'Arrival', t:'Welcome to El Horizonte', p:''}
+      ]
+    }
+  };
+
+  const ICONS = {
+    start:'<svg viewBox="0 0 64 64"><rect x="8" y="20" width="48" height="30" rx="3" fill="none" stroke="currentColor" stroke-width="5"/><path d="M20 20v30M32 20v30M44 20v30" stroke="currentColor" stroke-width="4"/></svg>',
+    ref:'<svg viewBox="0 0 64 64"><path d="M32 6c-10 0-18 8-18 18 0 14 18 34 18 34s18-20 18-34c0-10-8-18-18-18Z" fill="currentColor"/><circle cx="32" cy="24" r="7" fill="var(--sign)"/></svg>',
+    keepOn:'<svg viewBox="0 0 64 64"><path d="M30 40 52 16" stroke="currentColor" stroke-opacity=".4" stroke-width="7"/><path d="m45 14 10 10M55 14 45 24" stroke="currentColor" stroke-width="4"/><path d="M24 6 8 24h10v34h12V24h10Z" fill="currentColor"/></svg>',
+    forkRight:'<svg viewBox="0 0 64 64"><path d="M26 58V36L12 20" fill="none" stroke="currentColor" stroke-opacity=".4" stroke-width="9"/><path d="M26 58V36l14-14" fill="none" stroke="currentColor" stroke-width="10"/><path d="M52 10 30 14l18 18Z" fill="currentColor"/></svg>',
+    climb:'<svg viewBox="0 0 64 64"><path d="M6 54h52L58 14Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><text x="34" y="48" font-size="22" font-weight="800" fill="currentColor" font-family="Overpass,sans-serif">1</text></svg>',
+    arrive:'<svg viewBox="0 0 64 64"><path d="M8 30 32 8l24 22v26H8Z" fill="currentColor"/><path d="M26 56V40h12v16" fill="var(--sign)"/></svg>'
+  };
+
+  // stop = segundo del video donde se pausa al llegar a cada punto.
+  // Cada tramo va del stop anterior al siguiente: el video avanza sin saltos.
+  const STEPS = [
+    {icon:'start', stop:0,  frac:0},
+    {icon:'ref',   stop:4.1, at:[495,995], pin:[60,0]},
+    {icon:'forkRight', stop:13.8, mark:12, at:[720,690], pin:[60,0]},
+    {icon:'keepOn', stop:21.6, mark:18.0, at:[812,594], pin:[62,-22]},
+    {icon:'keepOn', stop:27.9, mark:26.3, at:[872,440], pin:[48,14]},
+    {icon:'keepOn', stop:34.8, mark:33.3, at:[835,338], pin:[50,16]},
+    {icon:'climb', caution:true, stop:46.3, mark:45.5, at:[685,155], pin:[44,22]},
+    {icon:'arrive', stop:56.6, mark:49.3, frac:1}
+  ];
+  const LAST = STEPS.length-1;
+
+  const $ = id => document.getElementById(id);
+  const v=$('v'), route=$('route'), done=$('done'), car=$('car');
+  const L = route.getTotalLength();
+  done.style.strokeDasharray = L+' '+L;
+  const pt = f => route.getPointAtLength(Math.max(0,Math.min(1,f))*L);
+  function setFrac(f){ const p=pt(f); car.setAttribute('cx',p.x); car.setAttribute('cy',p.y); done.style.strokeDashoffset=(L-f*L); }
+
+  STEPS.forEach(s=>{
+    if(!s.at) return;
+    let best=0,bd=1e9;
+    for(let k=0;k<=800;k++){ const p=pt(k/800), d=(p.x-s.at[0])**2+(p.y-s.at[1])**2; if(d<bd){bd=d;best=k/800;} }
+    s.frac=best;
+  });
+  // posición en el mapa según el segundo del video
+  function fracAt(t){
+    if(t<=STEPS[0].stop) return 0;
+    for(let i=1;i<STEPS.length;i++){
+      const a=STEPS[i-1], b=STEPS[i];
+      if(t<=b.stop){ const m=b.mark||b.stop; if(t>=m) return b.frac; return a.frac+(b.frac-a.frac)*((t-a.stop)/(m-a.stop)); }
+    }
+    return 1;
+  }
+
+  const NS='http://www.w3.org/2000/svg';
+  STEPS.forEach((s,i)=>{
+    if(i===0||i===LAST) return;
+    const p=pt(s.frac), g=document.createElementNS(NS,'g');
+    g.setAttribute('transform',`translate(${p.x+s.pin[0]} ${p.y+s.pin[1]})`);
+    g.innerHTML=`<circle r="42" fill="${s.caution?'var(--amber)':'var(--sign)'}" stroke="var(--surface)" stroke-width="5"/>`+
+      `<text y="18" text-anchor="middle" font-size="52" font-weight="800" fill="${s.caution?'#2A2200':'#fff'}" font-family="Overpass,sans-serif">${i}</text>`;
+    $('pins').appendChild(g);
+  });
+  {
+    const f=STEPS[1].frac+(STEPS[2].frac-STEPS[1].frac)*.5, p=pt(f);
+    const t=document.createElementNS(NS,'text');
+    t.id='arriveLabel'; t.setAttribute('x',p.x+50); t.setAttribute('y',p.y+30);
+    t.setAttribute('font-size','34'); t.setAttribute('font-weight','600'); t.setAttribute('fill','var(--sign)'); t.setAttribute('fill-opacity','.7');
+    t.setAttribute('font-family','Overpass,sans-serif');
+    $('arrows').appendChild(t);
+  }
+
+  // zoom automático del punto 2 en adelante
+  const VB_FULL=[470,0,560,1160], VB_ZOOM=VB_FULL;
+  let vb=VB_FULL.slice(), vbTarget=null, zoomRaf=0;
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setZoom(on){
+    const to=on?VB_ZOOM:VB_FULL;
+    if(vbTarget&&vbTarget.join()===to.join()) return;
+    vbTarget=to; cancelAnimationFrame(zoomRaf);
+    const from=vb.slice(), t0=performance.now(), dur=reduce?0:700;
+    const stepZ=now=>{
+      const k=dur?Math.min(1,(now-t0)/dur):1, e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+      vb=from.map((a,i)=>a+(to[i]-a)*e);
+      $('map').setAttribute('viewBox',vb.join(' '));
+      if(k<1) zoomRaf=requestAnimationFrame(stepZ);
+    };
+    zoomRaf=requestAnimationFrame(stepZ);
+  }
+
+  // idioma
+  let lang='es';
+  try{ lang = location.hash==='#en' ? 'en' : location.hash==='#es' ? 'es'
+    : (localStorage.getItem('rs-lang') || ((navigator.language||'es').toLowerCase().startsWith('es')?'es':'en')); }catch(e){}
+  function setLang(l){
+    lang=l; document.documentElement.lang=l;
+    try{ localStorage.setItem('rs-lang',l); }catch(e){}
+    if(location.hash!=='#'+l){ try{ history.replaceState(null,'','#'+l); }catch(e){} }
+    document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===l));
+    document.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[l][el.dataset.t]);
+    $('mapbox').setAttribute('aria-label',T[l].mapLabel);
+    $('exitLabel').textContent=T[l].exit;
+    $('arriveLabel').textContent=T[l].chipEnd;
+    document.title = T[l].h1+' · Rincón Sereno';
+    buildChips(); render(); setStatus(statusKey);
+    $('sound').textContent = v.muted?T[l].soundOff:T[l].soundOn;
+    $('again').textContent = T[l].again;
+  }
+  document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+  window.addEventListener('hashchange',()=>{ if(location.hash==='#en'||location.hash==='#es') setLang(location.hash.slice(1)); });
+
+  let cur=0, segStart=0, segEnd=STEPS[0].stop, raf=0, statusKey='', visited=new Set([0]);
+
+  function buildChips(){
+    const c=$('chips'); c.innerHTML=''; c.setAttribute('aria-label',lang==='es'?'Puntos de la ruta':'Route points');
+    STEPS.forEach((s,i)=>{
+      const b=document.createElement('button'); b.type='button'; b.setAttribute('role','tab');
+      b.textContent = i===0?T[lang].chipStart : i===LAST?T[lang].chipEnd : String(i);
+      b.addEventListener('click',()=>go(i)); c.appendChild(b);
+    });
+  }
+
+  // el aviso de precaución del punto 6 aparece solo al llegar (pausa)
+  let reached=false;
+  function render(){
+    const s=STEPS[cur], tx=T[lang].steps[cur];
+    const approach = !!tx.aT && !reached;
+    $('icon').innerHTML=ICONS[approach?'keepOn':s.icon];
+    $('kicker').textContent = (cur===0||cur===LAST) ? tx.k : T[lang].point(cur)+(approach?'':tx.k);
+    $('title').textContent=approach?tx.aT:tx.t; $('text').textContent=approach?tx.aP:tx.p;
+    $('sign').classList.toggle('caution',!!s.caution && !approach);
+    $('prev').textContent=T[lang].prev; $('prev').disabled=cur===0;
+    $('next').textContent = cur===LAST ? T[lang].restart : (cur===0?T[lang].start:T[lang].next);
+    setZoom(cur>=3);
+    [...$('chips').children].forEach((b,i)=>{
+      b.classList.toggle('on',i===cur); b.classList.toggle('done',visited.has(i)&&i!==cur);
+      b.setAttribute('aria-selected',i===cur);
+    });
+    const chip=$('chips').children[cur]; if(chip) chip.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+  }
+
+  function setStatus(key){
+    statusKey=key; const el=$('status');
+    if(!key){ el.classList.remove('show'); return; }
+    el.textContent=T[lang][key]; el.classList.add('show');
+  }
+
+  function arrived(){
+    v.pause(); setFrac(STEPS[cur].frac); $('bar').style.width='100%';
+    if(!reached){ reached=true; render(); }
+    if(cur>=2) setZoom(true);
+    setStatus(cur===0?'':'arrived');
+    $('again').classList.toggle('show',cur>0);
+    const n=$('next'); n.classList.remove('ready'); void n.offsetWidth; if(cur<LAST) n.classList.add('ready');
+  }
+
+  function loop(){
+    tick();
+    if(!v.paused && !atStop) raf=requestAnimationFrame(loop);
+  }
+  // también en timeupdate: en iPhone el ciclo de animación puede detenerse
+  let atStop=false;
+  function tick(){
+    if(atStop) return;
+    const t=v.currentTime;
+    $('bar').style.width=Math.max(0,Math.min(100,(t-segStart)/(segEnd-segStart)*100))+'%';
+    setFrac(fracAt(t));
+    if(t>=segEnd-0.03){ atStop=true; arrived(); }
+  }
+  v.addEventListener('timeupdate',()=>{ if(!v.paused) tick(); });
+  let playing=false;
+  v.addEventListener('playing',()=>{ playing=true; });
+  v.addEventListener('pause',()=>{ playing=false; });
+  v.addEventListener('ended',()=>{ playing=false; });
+  setInterval(()=>{
+    if(playing||!v.paused) tick();
+  },120);
+
+  // reproduce el tramo que lleva al punto i
+  function playSegment(i){
+    segStart = i===0 ? 0 : STEPS[i-1].stop; segEnd = STEPS[i].stop;
+    $('again').classList.remove('show'); $('next').classList.remove('ready');
+    cancelAnimationFrame(raf); atStop=false;
+    if(reached && T[lang].steps[i].aT){ reached=false; render(); }
+    setStatus('playing');
+    const needSeek=Math.abs(v.currentTime-segStart)>0.25;
+    if(needSeek && v.readyState>=2){ try{ v.currentTime=segStart; }catch(e){} }
+    // play() debe ir directo del toque del usuario (requisito de iPhone)
+    const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{ setStatus('paused'); });
+    if(needSeek && v.readyState<2){
+      const s0=segStart;
+      v.addEventListener('canplay',()=>{ try{ v.currentTime=s0; }catch(e){} },{once:true});
+    }
+  }
+
+  function go(i){
+    i=Math.max(0,Math.min(LAST,i));
+    cur=i; visited.add(i); reached=(i===0); render();
+    if(i===0){ v.pause(); cancelAnimationFrame(raf); try{ v.currentTime=STEPS[0].stop; }catch(e){} segStart=0; segEnd=STEPS[0].stop;
+      setFrac(0); $('bar').style.width='0%'; setStatus(''); $('again').classList.remove('show'); return; }
+    playSegment(i);
+  }
+
+  v.addEventListener('play',()=>{ cancelAnimationFrame(raf); raf=requestAnimationFrame(loop); });
+  v.addEventListener('ended',()=>arrived());
+  v.addEventListener('click',()=>{
+    if(cur===0){ go(1); return; }
+    if(v.currentTime>=segEnd-0.05){ playSegment(cur); return; }
+    if(v.paused){ setStatus('playing'); v.play(); } else { v.pause(); cancelAnimationFrame(raf); setStatus('paused'); }
+  });
+  $('next').addEventListener('click',()=>go(cur===LAST?0:cur+1));
+  $('prev').addEventListener('click',()=>go(cur-1));
+  $('again').addEventListener('click',()=>playSegment(cur));
+  $('sound').addEventListener('click',()=>{
+    v.muted=!v.muted; $('sound').textContent=v.muted?T[lang].soundOff:T[lang].soundOn; $('sound').setAttribute('aria-pressed',!v.muted);
+  });
+
+  setLang(lang); setFrac(0);
+  v.addEventListener('loadedmetadata',()=>{ if(cur===0){ try{ v.currentTime=STEPS[0].stop; }catch(e){} } },{once:true});
+})();
+</script>
+</body>
+</html>
